@@ -1,11 +1,15 @@
 # marussiakuz_infra
 marussiakuz Infra repository
 
-Исследоватþ способ подклĀчениā к someinternalhost в одну команду из вашего
-рабочего устройства, проверитþ работоспособностþ найденного решениā и внести
-его в README.md в вашем репозитории
-Дополнителþное задание:
-Предложитþ вариант решениā длā подклĀчениā из консоли при помощи командý
-вида ssh someinternalhost из локалþной консоли рабочего устройства, чтобý
-подклĀчение вýполнāлосþ по алиасу someinternalhost и внести его в README.md в
-вашем репозитории
+bastion_IP = 158.160.105.151
+someinternalhost_IP = 10.128.0.7
+
+Command to connect to someinternalhost: ssh -J marussia@158.160.105.151 marussia@10.128.0.7
+
+Solution option for connecting from the console using the command ssh someinternalhost:
+
+Add to ~/.ssh/config:
+'Host someinternalhost
+   HostName 10.128.0.7
+   User marussia
+   ProxyJump marussia@158.160.105.151'
