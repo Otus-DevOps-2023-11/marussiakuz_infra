@@ -1,7 +1,7 @@
 # marussiakuz_infra
 marussiakuz Infra repository
 
-testapp_IP = 158.160.114.150 \
+testapp_IP = 158.160.114.150 
 testapp_port = 9292
 
 yc compute instance create \
