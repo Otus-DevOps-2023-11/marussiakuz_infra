@@ -1,0 +1,78 @@
+#cloud-config
+datasource:
+ Ec2:
+  strict_id: false
+ssh_pwauth: no
+users:
+  - name: yc-user
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDNZIwxWphV0vK4YT/gFRXrpklFQwvXpg58dTbeXNUj+yt4NE9ZXSqiWTUKqBKW8qDZ6kSpqf19J8C0qtVtZUaa/RnprHOEuSJF/Ci4F78jsR3ZvyQfSsCe6rS/kAkXi3Jf2l5BDtQ7t0d2zwHpzQ/8D6XASp2lGcPPe4GRtegUO6XLozdBPxm+sTLsJQ4BbRgrSL72cqm2v9GsicBcgozm9IjPG3AZBeBzHH0XgNblH8+uo4UxF8B94AaRTs+T81xjnCiIEE+5qH3c5B5Bk7Zyhml5kcDtB0YTpn/0WJ4znuL3dftlAh537VkWqJh4df1gBOsir4xQzZ8wpaGSPHPt+gHbAGUKdK04RfKdo9+CV76pd8K/Sh9iB/PEtLCcyIBz4Tu5ztNfWyo9wTQnuzGN4sfiOH0F59oEEiLhhLjRmz9FDUWMzARW5OeOgyDw131ZvdvnlqIpYM3Vc/WG5W91aFKUYmAL0zq/1yQbednpTGZpyi5F98Wflin18FP5Jmc= marussia
+package_update: true
+packages:
+ - nano
+write_files:
+ - path: /home/yc-user/setup.sh
+   permissions: '0755'
+   content: |
+     #!/bin/bash
+     sudo chown yc-user:yc-user /home/yc-user
+     cd /home/yc-user
+
+     # Запуск скрипта install_ruby.sh
+     cat << EOF > /home/yc-user/install_ruby.sh
+     #!/bin/bash
+     sudo apt update
+     sudo apt install --yes -y ruby-full ruby-bundler build-essential
+     EOF
+     chmod +x /home/yc-user/install_ruby.sh
+     bash /home/yc-user/install_ruby.sh
+
+     # Запуск скрипта install_mongodb.sh
+     cat << EOF > /home/yc-user/install_mongodb.sh
+     #!/bin/bash
+     sudo apt update
+     sudo apt install mongodb -y
+     sudo systemctl start mongodb
+     sudo systemctl enable mongodb
+     EOF
+     chmod +x /home/yc-user/install_mongodb.sh
+     bash /home/yc-user/install_mongodb.sh
+
+     # Запуск скрипта deploy.sh
+     cat << EOF > /home/yc-user/deploy.sh
+     #!/bin/bash
+     # Checking if git is installed
+     if ! command -v git &> /dev/null; then
+        echo "Git not found. Installation..."
+        sudo apt update
+        sudo apt install --yes git
+     else
+        echo "Git already is installed."
+     fi
+
+     git clone -b monolith https://github.com/express42/reddit.git
+     cd reddit && bundle install
+     puma -d
+     ps aux | grep puma
+     EOF
+     chmod +x /home/yc-user/deploy.sh
+     bash /home/yc-user/deploy.sh
+
+     echo "Finished start script"
+runcmd:
+ - echo "[Unit]" > /etc/systemd/system/setup.service
+ - echo "Description=Setup script" >> /etc/systemd/system/setup.service
+ - echo "After=network.target" >> /etc/systemd/system/setup.service
+ - echo "" >> /etc/systemd/system/setup.service
+ - echo "[Service]" >> /etc/systemd/system/setup.service
+ - echo "ExecStart=/home/yc-user/setup.sh" >> /etc/systemd/system/setup.service
+ - echo "User=yc-user" >> /etc/systemd/system/setup.service
+ - echo "Type=oneshot" >> /etc/systemd/system/setup.service
+ - echo "RemainAfterExit=yes" >> /etc/systemd/system/setup.service
+ - echo "" >> /etc/systemd/system/setup.service
+ - echo "[Install]" >> /etc/systemd/system/setup.service
+ - echo "WantedBy=multi-user.target" >> /etc/systemd/system/setup.service
+ - sudo systemctl enable setup.service
+ - sudo systemctl start setup.service
