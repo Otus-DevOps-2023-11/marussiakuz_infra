@@ -1,0 +1,49 @@
+{
+    "builders": [
+        {
+            "type": "yandex",
+            "service_account_key_file": "{{user `yandex_service_account_key_file`}}",
+            "folder_id": "{{user `yandex_folder_id`}}",
+            "source_image_family": "{{user `yandex_source_image_family`}}",
+            "image_name": "{{user `yandex_image_name`}}",
+            "image_family": "{{user `yandex_image_family`}}",
+            "ssh_username": "{{user `yandex_ssh_username`}}",
+            "platform_id": "standard-v1",
+            "use_ipv4_nat": true,
+            "instance_name": "{{user `yandex_instance_name`}}",
+            "disk_size_gb": "{{user `yandex_disk_size`}}",
+            "zone": "{{user `yandex_zone`}}",
+            "metadata": {
+                "serial_port_enable": "{{user `yandex_serial_port`}}"
+            },
+            "metadata_from_file": {
+                "user_data": "{{user `yandex_metadata_file`}}"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "printf '[Unit]\\nDescription=Puma\\nAfter=network.target\\n\\n[Service]\\nType=simple\\nUser=yc-user\\nWorkingDirectory=/home/yc-user/reddit\\nExecStart=/usr/local/bin/puma\\nRestart=always\\n\\n[Install]\\nWantedBy=multi-user.target' | sudo tee /etc/systemd/system/puma.service",
+                "sudo systemctl enable puma.service",
+                "sudo systemctl start puma.service"
+            ]
+        },
+        {
+            "type": "shell",
+            "script": "scripts/install_ruby.sh",
+            "execute_command": "sudo {{.Path}}"
+        },
+        {
+            "type": "shell",
+            "script": "scripts/install_mongodb.sh",
+            "execute_command": "sudo {{.Path}}"
+        },
+        {
+            "type": "shell",
+            "script": "files/deploy.sh",
+            "execute_command": "sudo {{.Path}}"
+        }
+    ]
+}
