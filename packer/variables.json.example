@@ -1,0 +1,10 @@
+{
+    "yandex_service_account_key_file": "/Users/Marya/OTUS_education/secrets/key.json",
+    "yandex_folder_id": "b1gfur0hriltnhfetmgg",
+    "yandex_source_image_family": "ubuntu-1604-lts",
+    "yandex_image_name": "reddit-base-{{timestamp}}",
+    "yandex_image_family": "reddit-base",
+    "yandex_ssh_username": "ubuntu",
+    "yandex_instance_name": "reddit-app",
+    "yandex_serial_port": "1"
+}
