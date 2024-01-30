@@ -10,8 +10,7 @@ marussiakuz Infra repository
 Проверить можно здесь: http://178.154.202.6:9292/
 
 
-
-testapp_IP = 158.160.114.150 \
+testapp_IP = 158.160.114.150 
 testapp_port = 9292
 
 yc compute instance create \
