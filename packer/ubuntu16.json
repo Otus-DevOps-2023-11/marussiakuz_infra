@@ -1,0 +1,31 @@
+{
+    "builders": [
+        {
+            "type": "yandex",
+            "service_account_key_file": "{{user `yandex_service_account_key_file`}}",
+            "folder_id": "{{user `yandex_folder_id`}}",
+            "source_image_family": "{{user `yandex_source_image_family`}}",
+            "image_name": "{{user `yandex_image_name`}}",
+            "image_family": "{{user `yandex_image_family`}}",
+            "ssh_username": "{{user `yandex_ssh_username`}}",
+            "platform_id": "standard-v1",
+            "use_ipv4_nat": true,
+            "instance_name": "{{user `yandex_instance_name`}}",
+            "metadata": {
+                "serial_port_enable": "{{user `yandex_serial_port`}}"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "scripts/install_ruby.sh",
+            "execute_command": "sudo {{.Path}}"
+        },
+        {
+            "type": "shell",
+            "script": "scripts/install_mongodb.sh",
+            "execute_command": "sudo {{.Path}}"
+        }
+    ]
+}

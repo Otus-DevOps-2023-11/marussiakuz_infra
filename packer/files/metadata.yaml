@@ -1,0 +1,12 @@
+#cloud-config
+datasource:
+ Ec2:
+  strict_id: false
+ssh_pwauth: no
+users:
+  - name: yc-user
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDNZIwxWphV0vK4YT/gFRXrpklFQwvXpg58dTbeXNUj+yt4NE9ZXSqiWTUKqBKW8qDZ6kSpqf19J8C0qtVtZUaa/RnprHOEuSJF/Ci4F78jsR3ZvyQfSsCe6rS/kAkXi3Jf2l5BDtQ7t0d2zwHpzQ/8D6XASp2lGcPPe4GRtegUO6XLozdBPxm+sTLsJQ4BbRgrSL72cqm2v9GsicBcgozm9IjPG3AZBeBzHH0XgNblH8+uo4UxF8B94AaRTs+T81xjnCiIEE+5qH3c5B5Bk7Zyhml5kcDtB0YTpn/0WJ4znuL3dftlAh537VkWqJh4df1gBOsir4xQzZ8wpaGSPHPt+gHbAGUKdK04RfKdo9+CV76pd8K/Sh9iB/PEtLCcyIBz4Tu5ztNfWyo9wTQnuzGN4sfiOH0F59oEEiLhhLjRmz9FDUWMzARW5OeOgyDw131ZvdvnlqIpYM3Vc/WG5W91aFKUYmAL0zq/1yQbednpTGZpyi5F98Wflin18FP5Jmc= marussia
+package_update: true
