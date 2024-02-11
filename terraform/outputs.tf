@@ -3,5 +3,5 @@ output "instance_ips" {
 }
 
 output "lb_external_ip" {
-  value = yandex_alb_load_balancer.reddit_lb.listener[0].endpoint[0].address[0].external_ipv4_address[0].address
+  value = element(tolist(yandex_lb_network_load_balancer.reddit-lb.listener),  0).external_address_spec
 }
