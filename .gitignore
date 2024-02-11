@@ -7,4 +7,5 @@
 *.sh.b64
 *.txt
 *.idea
+*.info
 packer
