@@ -1,13 +1,13 @@
-terraform {
-  required_version = ">=  0.12"
-
-  required_providers {
-    yandex = {
-      source  = "yandex-cloud/yandex"
-      version = ">=  0.90"
-    }
-  }
-}
+#terraform {
+#  required_version = ">=  0.12"
+#
+#  required_providers {
+#    yandex = {
+#      source  = "yandex-cloud/yandex"
+#      version = ">=  0.90"
+#    }
+#  }
+#}
 
 provider "yandex" {
   service_account_key_file = var.service_account_key_file
