@@ -1,0 +1,10 @@
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/
+*.DS_Store
+*.sh
+*.sh.b64
+../sshkeys.txt
+./
