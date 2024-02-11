@@ -39,5 +39,5 @@ variable "service_account_id" {
 variable "instance_count" {
   description = "the number of instances being created"
   type        = number
-  default     = 2
+  default     = 1
 }
